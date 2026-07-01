@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visionix AI - Smart Farming</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Language Toggle -->
+  <div class="lang-bar">
+    <span class="lang-label">🌐 Language:</span>
+    <div class="lang-buttons">
+      <button class="lang-btn active" onclick="setLang('english')">English</button>
+      <button class="lang-btn" onclick="setLang('hindi')">हिंदी</button>
+      <button class="lang-btn" onclick="setLang('bhojpuri')">भोजपुरी</button>
+      <button class="lang-btn" onclick="setLang('marathi')">मराठी</button>
+      <button class="lang-btn" onclick="setLang('telugu')">తెలుగు</button>
+      <button class="lang-btn" onclick="setLang('tamil')">தமிழ்</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-glow"></div>
+    <div class="leaf-icon">🌾</div>
+    <h1>Visionix AI</h1>
+    <p id="headerSub">AI-Based Smart Resource Allocation for Farmers</p>
+    <div class="status-bar">
+      <span id="modelStatus" class="status-dot loading">⏳ Loading AI Model...</span>
+      <span id="backendStatus" class="status-dot loading">⏳ Connecting Backend...</span>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Weather -->
+    <div class="card card-weather">
+      <div class="card-icon">🌦️</div>
+      <h2 id="weatherTitle">Weather Prediction</h2>
+      <div class="input-group">
+        <input type="text" id="city" placeholder="Enter your city name">
+        <button onclick="getWeather()" class="btn-primary">Check Weather</button>
+      </div>
+      <div id="weatherResult" class="result-box"></div>
+    </div>
+
+    <!-- Crop Disease Detection -->
+    <div class="card card-detect">
+      <div class="card-icon">📸</div>
+      <h2 id="detectTitle">Crop Disease Detection</h2>
+      <div class="upload-zone" onclick="document.getElementById('imageUpload').click()">
+        <div class="upload-icon">📷</div>
+        <p id="uploadText">Click to upload crop photo</p>
+        <input type="file" id="imageUpload" accept="image/*" style="display:none">
+      </div>
+      <img id="preview" />
+      <button onclick="detectDisease()" class="btn-primary">🔍 Analyze Crop</button>
+      <div id="diseaseResult" class="result-box"></div>
+    </div>
+
+    <!-- Smart Recommendation -->
+    <div class="card card-recommend">
+      <div class="card-icon">📋</div>
+      <h2 id="recommendTitle">Smart Recommendation</h2>
+      <div id="recommendation" class="result-box"></div>
+    </div>
+
+    <!-- Mandi Price -->
+    <div class="card card-mandi">
+      <div class="card-icon">💰</div>
+      <h2 id="mandiTitle">Mandi Price</h2>
+      <div class="input-group">
+        <input type="text" id="cropName" placeholder="Crop name (e.g. Wheat, Rice)">
+        <input type="text" id="stateName" placeholder="State (e.g. Bihar)">
+        <button onclick="getMandiPrice()" class="btn-primary">Get Price</button>
+      </div>
+      <div id="mandiResult" class="result-box"></div>
+    </div>
+
+    <!-- AI Chatbot -->
+    <div class="card card-chat full-width">
+      <div class="card-icon">🤖</div>
+      <h2 id="chatTitle">AI Farmer Assistant</h2>
+      <p class="card-sub" id="chatSub">Upload a crop photo first, then ask me anything about it!</p>
+      <div id="chatBox" class="chat-box">
+        <div class="chat-msg bot">
+          <span class="chat-avatar">🌾</span>
+          <div class="chat-bubble" id="welcomeMsg">Namaste! I'm Visionix AI. Upload a crop photo and ask me about diseases, treatment, irrigation, or mandi prices!</div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Ask about your crop...">
+        <button onclick="startVoice()" class="btn-voice" id="voiceBtn">🎤</button>
+        <button onclick="sendChat()" class="btn-send">Send</button>
+      </div>
+      <div class="quick-questions">
+        <span>Quick:</span>
+        <button class="quick-btn" onclick="quickAsk('What is the treatment for this disease?')">💊 Treatment?</button>
+        <button class="quick-btn" onclick="quickAsk('When should I irrigate?')">💧 Irrigation?</button>
+        <button class="quick-btn" onclick="quickAsk('What is the best fertilizer?')">🌱 Fertilizer?</button>
+        <button class="quick-btn" onclick="quickAsk('What is the mandi price of my crop?')">💰 Mandi Price?</button>
+      </div>
+    </div>
+
+    <!-- Detection History -->
+    <div class="card card-history full-width">
+      <div class="card-icon">📊</div>
+      <h2 id="historyTitle">Detection History</h2>
+      <div id="historyList" class="history-list">
+        <p class="empty-history">No detections yet. Analyze a crop to see history.</p>
+      </div>
+      <button onclick="clearHistory()" class="btn-secondary">🗑 Clear History</button>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2026 Visionix AI &nbsp;|&nbsp; Empowering Indian Farmers with AI</p>
+    <span class="credit">Created by Priyavart &amp;</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
