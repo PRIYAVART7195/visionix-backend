@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visionix AI - Smart Farming</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="logo-wrap">🌾</div>
+      <div class="header-titles">
+        <h1>Visionix AI</h1>
+        <p id="headerSub">AI-Based Smart Resource Allocation for Farmers</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-pills">
+        <span id="modelStatus" class="pill loading">⏳ AI Vision</span>
+        <span id="backendStatus" class="pill loading">⏳ Backend</span>
+      </div>
+      <div class="lang-buttons">
+        <button class="lang-btn active" onclick="setLang('english', this)">EN</button>
+        <button class="lang-btn" onclick="setLang('hindi', this)">हि</button>
+        <button class="lang-btn" onclick="setLang('bhojpuri', this)">भो</button>
+        <button class="lang-btn" onclick="setLang('marathi', this)">म</button>
+        <button class="lang-btn" onclick="setLang('telugu', this)">తె</button>
+        <button class="lang-btn" onclick="setLang('tamil', this)">த</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('copilot', this)">🚀 <span>Farm Copilot</span></button>
+    <button class="tab" onclick="switchTab('detect', this)">📸 <span>Detect</span></button>
+    <button class="tab" onclick="switchTab('kisanbot', this)">🤖 <span>Kisan Bot</span></button>
+    <button class="tab" onclick="switchTab('weather', this)">🌦️ <span>Weather</span></button>
+    <button class="tab" onclick="switchTab('mandi', this)">💰 <span>Mandi</span></button>
+    <button class="tab" onclick="switchTab('calendar', this)">🌱 <span>Calendar</span></button>
+    <button class="tab" onclick="switchTab('soil', this)">🎯 <span>Soil</span></button>
+    <button class="tab" onclick="switchTab('scheme', this)">🏛️ <span>Gov Schemes</span></button>
+    <button class="tab" onclick="switchTab('dashboard', this)">📈 <span>Dashboard</span></button>
+    <button class="tab" onclick="switchTab('history', this)">📊 <span>History</span></button>
+  </div>
+
+  <div class="tab-content">
+
+    <!-- WEATHER TAB -->
+    <div class="tab-panel" id="tab-weather">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-icon">🌦️</span>
+          <div>
+            <h2 id="weatherTitle">Weather Prediction</h2>
+            <p class="panel-sub">Get 5-day forecast for your city</p>
+          </div>
+        </div>
+        <div class="input-row">
+          <input type="text" id="city" placeholder="Enter your city name" class="input-field">
+          <button onclick="getWeather()" class="btn-primary">Check Weather</button>
+        </div>
+        <div id="weatherResult" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- DETECT TAB -->
+    <div class="tab-panel" id="tab-detect">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-icon">📸</span>
+          <div>
+            <h2 id="detectTitle">Crop Disease Detection</h2>
+            <p class="panel-sub">Upload photo — Groq Vision AI will analyze</p>
+          </div>
+        </div>
+        <div class="capture-row">
+          <button onclick="openCamera()" class="btn-camera">📷 Camera</button>
+          <button onclick="document.getElementById('imageUpload').click()" class="btn-upload">📁 Upload Photo</button>
+        </div>
+        <input type="file" id="imageUpload" accept="image/*" style="display:none">
+        <video id="cameraStream" autoplay style="display:none;width:100%;border-radius:12px;margin-top:10px"></video>
+        <button id="captureBtn" onclick="capturePhoto()" class="btn-primary" style="display:none;margin-top:8px">📸 Capture</button>
+        <canvas id="canvas" style="display:none"></canvas>
+        <img id="preview" />
+        <button onclick="detectDisease()" class="btn-primary" style="margin-top:12px">🔍 Analyze Crop</button>
+        <div id="diseaseResult" class="result-box"></div>
+        <button id="whatsappBtn" onclick="shareWhatsApp()" class="btn-whatsapp" style="display:none">📱 Share on WhatsApp</button>
+        <div id="recommendation" class="result-box" style="margin-top:10px"></div>
+
+        <!-- Go to Kisan Bot Button -->
+        <div id="gotoBot" style="display:none; margin-top:14px">
+          <button onclick="switchTab('kisanbot', document.querySelector('.tab:nth-child(3)'));openFloatingChat()" class="btn-kisanbot">
+            🤖 Chat with Kisan Bot about this disease →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- KISAN BOT TAB -->
+    <div class="tab-panel" id="tab-kisanbot">
+      <div class="panel-card kisanbot-card">
+        <div class="panel-header">
+          <span class="panel-icon">🤖</span>
+          <div>
+            <h2>Kisan Bot</h2>
+            <p class="panel-sub">Your personal AI farming assistant — Ask anything!</p>
+          </div>
+          <div class="bot-status">
+            <span class="bot-online-dot"></span>
+            <span style="font-size:12px;color:var(--accent2)">Online</span>
+          </div>
+        </div>
+        <div id="kisanBotBox" class="chat-box kisanbot-box">
+          <div class="chat-msg bot">
+            <span class="chat-avatar">🌾</span>
+            <div class="chat-bubble" id="welcomeMsg">Namaste! Main Visionix Kisan Bot hoon 🌾 Aapki kaise madad kar sakta hoon?</div>
+          </div>
+        </div>
+        <div id="kisanBotQuickReplies" class="quick-reply-row"></div>
+        <div class="chat-input-row">
+          <input type="text" id="kisanBotInput" placeholder="Apni fasal ke baare mein poochein..." class="input-field">
+          <button onclick="startVoiceBot()" class="btn-voice" id="voiceBtnBot">🎤</button>
+          <button onclick="sendKisanBot()" class="btn-send">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANDI TAB -->
+    <div class="tab-panel" id="tab-mandi">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-icon">💰</span>
+          <div>
+            <h2 id="mandiTitle">Mandi Price</h2>
+            <p class="panel-sub">Real-time market prices + trend graph</p>
+          </div>
+        </div>
+        <div class="input-row">
+          <input type="text" id="cropName" placeholder="Crop name (e.g. Wheat)" class="input-field">
+          <input type="text" id="stateName" placeholder="State (e.g. Bihar)" class="input-field">
+          <button onclick="getMandiPrice()" class="btn-primary">Get Price</button>
+        </div>
+        <div id="mandiResult" class="result-box"></div>
+        <div id="graphContainer" style="display:none;margin-top:20px">
+          <h3 style="color:var(--accent3);font-family:var(--font-head);margin-bottom:12px">📊 Price Trend</h3>
+          <canvas id="priceChart"></canvas>
+        </div>
+        <div class="crop-chips">
+          <span class="chip-label">Popular:</span>
+          <button class="crop-chip" onclick="quickCrop('Wheat')">🌾 Wheat</button>
+          <button class="crop-chip" onclick="quickCrop('Rice')">🍚 Rice</button>
+          <button class="crop-chip" onclick="quickCrop('Tomato')">🍅 Tomato</button>
+          <button class="crop-chip" onclick="quickCrop('Potato')">🥔 Potato</button>
+          <button class="crop-chip" onclick="quickCrop('Onion')">🧅 Onion</button>
+          <button class="crop-chip" onclick="quickCrop('Maize')">🌽 Maize</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CROP CALENDAR TAB -->
+    <div class="tab-panel" id="tab-calendar">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-icon">🌱</span>
+          <div>
+            <h2>Crop Calendar</h2>
+            <p class="panel-sub">Best crops based on season & region</p>
+          </div>
+        </div>
+        <div class="input-row">
+          <input type="text" id="calendarState" placeholder="Your state (e.g. Bihar)" class="input-field">
+          <select id="calendarMonth" class="input-field">
+            <option value="1">January</option><option value="2">February</option>
+            <option value="3">March</option><option value="4">April</option>
+            <option value="5">May</option><option value="6">June</option>
+            <option value="7" selected>July</option><option value="8">August</option>
+            <option value="9">September</option><option value="10">October</option>
+            <option value="11">November</option><option value="12">December</option>
+          </select>
+          <button onclick="getCropCalendar()" class="btn-primary">🌱 Get Calendar</button>
+        </div>
+        <div id="calendarResult" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD TAB -->
+    <div class="tab-panel" id="tab-dashboard">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-icon">📈</span>
+          <div>
+            <h2>Farm Dashboard</h2>
+            <p class="panel-sub">Your complete farm overview</p>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dash-card"><div class="dash-icon">🌡️</div><div class="dash-label">Temperature</div><div class="dash-value" id="dashTemp">-- °C</div></div>
+          <div class="dash-card"><div class="dash-icon">💧</div><div class="dash-label">Humidity</div><div class="dash-value" id="dashHumidity">-- %</div></div>
+          <div class="dash-card"><div class="dash-icon">🌧️</div><div class="dash-label">Rain Forecast</div><div class="dash-value" id="dashRain">--</div></div>
+          <div class="dash-card"><div class="dash-icon">🦠</div><div class="dash-label">Last Detection</div><div class="dash-value" id="dashDisease">None</div></div>
+          <div class="dash-card"><div class="dash-icon">📊</div><div class="dash-label">Total Scans</div><div class="dash-value" id="dashScans">0</div></div>
+          <div class="dash-card"><div class="dash-icon">✅</div><div class="dash-label">Healthy Crops</div><div class="dash-value" id="dashHealthy">0</div></div>
+        </div>
+        <div style="margin-top:20px">
+          <h3 style="color:var(--accent3);font-family:var(--font-head);margin-bottom:12px">📋 Recent Activity</h3>
+          <div id="dashActivity" class="result-box">Run weather check and crop analysis to see your farm dashboard!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOIL TAB -->
+    <div class="tab-panel" id="tab-soil">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-icon">🎯</span>
+          <div>
+            <h2>Soil Health Estimator</h2>
+            <p class="panel-sub">AI estimates your soil health</p>
+          </div>
+        </div>
+        <div class="input-row">
+          <input type="text" id="soilCity" placeholder="Your city" class="input-field">
+          <input type="text" id="soilCrop" placeholder="Current crop" class="input-field">
+          <select id="soilType" class="input-field">
+            <option value="alluvial">Alluvial Soil</option>
+            <option value="black">Black Soil</option>
+            <option value="red">Red Soil</option>
+            <option value="laterite">Laterite Soil</option>
+            <option value="desert">Desert Soil</option>
+            <option value="mountain">Mountain Soil</option>
+          </select>
+          <button onclick="getSoilHealth()" class="btn-primary">🎯 Analyze Soil</button>
+        </div>
+        <div id="soilResult" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div class="tab-panel" id="tab-history">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-icon">📊</span>
+          <div>
+            <h2>Detection History</h2>
+            <p class="panel-sub">Your last 20 crop analyses</p>
+          </div>
+        </div>
+        <div id="historyList" class="history-list">
+          <p class="empty-history">No detections yet.</p>
+        </div>
+        <button onclick="clearHistory()" class="btn-secondary" style="margin-top:16px">🗑 Clear History</button>
+      </div>
+    </div>
+
+  </div>
+
+    <!-- FARM COPILOT TAB -->
+    <div class="tab-panel active" id="tab-copilot">
+      <div class="panel-card copilot-card">
+        <div class="panel-header">
+          <span class="panel-icon">🚀</span>
+          <div>
+            <h2>Smart Farm Copilot</h2>
+            <p class="panel-sub">Complete AI Farm Intelligence — Disease + Weather + Soil + Mandi + 7-Day Plan</p>
+          </div>
+          <div class="copilot-badge">⭐ ALL-IN-ONE</div>
+        </div>
+
+        <!-- Input Form -->
+        <div class="copilot-form">
+          <div class="copilot-input-grid">
+            <div class="copilot-input-group">
+              <label>📍 Location</label>
+              <input type="text" id="copilotLocation" placeholder="e.g. Patna, Bihar" class="input-field">
+            </div>
+            <div class="copilot-input-group">
+              <label>🌱 Crop Name</label>
+              <input type="text" id="copilotCrop" placeholder="e.g. Tomato, Wheat, Rice" class="input-field">
+            </div>
+          </div>
+
+          <!-- Photo Upload -->
+          <div class="copilot-photo-section">
+            <label>📸 Crop Photo (Optional — for disease detection)</label>
+            <div class="copilot-upload-row">
+              <div class="copilot-upload-zone" onclick="document.getElementById('copilotImage').click()">
+                <span class="copilot-upload-icon">📷</span>
+                <span id="copilotUploadText">Click to upload crop photo</span>
+                <input type="file" id="copilotImage" accept="image/*" style="display:none">
+              </div>
+              <button onclick="openCopilotCamera()" class="btn-camera" style="flex:0;padding:10px 16px">📷 Camera</button>
+            </div>
+            <img id="copilotPreview" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:10px;margin-top:8px;border:1px solid var(--border)">
+            <canvas id="copilotCanvas" style="display:none"></canvas>
+            <video id="copilotCamera" autoplay style="display:none;width:100%;border-radius:10px;margin-top:8px"></video>
+            <button id="copilotCaptureBtn" onclick="captureCopilotPhoto()" class="btn-primary" style="display:none;margin-top:8px">📸 Capture</button>
+          </div>
+
+          <button onclick="runCopilot()" class="btn-copilot" id="copilotBtn">
+            🚀 Generate Complete Farm Report
+          </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="copilotLoading" style="display:none" class="copilot-loading">
+          <div class="copilot-loading-steps">
+            <div class="copilot-step" id="step1">📸 Analyzing crop photo...</div>
+            <div class="copilot-step" id="step2">🌦️ Fetching weather data...</div>
+            <div class="copilot-step" id="step3">🤖 Generating AI Farm Report...</div>
+          </div>
+        </div>
+
+        <!-- Report Output -->
+        <div id="copilotReport" style="display:none" class="copilot-report">
+          <div class="copilot-report-header">
+            <span>📊 Your Complete Farm Report</span>
+            <div style="display:flex;gap:8px">
+              <button onclick="shareCopilotWhatsApp()" class="btn-whatsapp" style="width:auto;padding:8px 16px;margin:0">📱 WhatsApp</button>
+              <button onclick="printCopilotReport()" class="btn-secondary" style="padding:8px 16px">🖨️ Print</button>
+            </div>
+          </div>
+          <div id="copilotReportContent" class="copilot-report-content"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GOVERNMENT SCHEME TAB -->
+    <div class="tab-panel" id="tab-scheme">
+      <div class="panel-card scheme-card">
+        <div class="panel-header">
+          <span class="panel-icon">🏛️</span>
+          <div>
+            <h2>Government Scheme Finder</h2>
+            <p class="panel-sub">Find PM-KISAN, crop insurance, subsidies & more — instantly!</p>
+          </div>
+          <div class="scheme-badge">🆓 FREE</div>
+        </div>
+
+        <div class="input-row">
+          <input type="text" id="schemeState" placeholder="Your state (e.g. Bihar, UP)" class="input-field">
+          <input type="text" id="schemeCrop" placeholder="Your crop (e.g. Wheat)" class="input-field">
+          <select id="schemeCategory" class="input-field">
+            <option value="all">All Schemes</option>
+            <option value="subsidy">Subsidies</option>
+            <option value="insurance">Crop Insurance</option>
+            <option value="loan">Farm Loans</option>
+            <option value="equipment">Equipment Support</option>
+            <option value="income">Income Support</option>
+          </select>
+          <button onclick="findSchemes()" class="btn-scheme">🔍 Find Schemes</button>
+        </div>
+
+        <!-- Quick Scheme Buttons -->
+        <div class="scheme-quick">
+          <span class="chip-label">Popular:</span>
+          <button class="scheme-chip" onclick="quickScheme('PM-KISAN')">💰 PM-KISAN</button>
+          <button class="scheme-chip" onclick="quickScheme('PMFBY crop insurance')">🛡️ Crop Insurance</button>
+          <button class="scheme-chip" onclick="quickScheme('Kisan Credit Card')">💳 KCC Loan</button>
+          <button class="scheme-chip" onclick="quickScheme('soil health card')">🎯 Soil Card</button>
+          <button class="scheme-chip" onclick="quickScheme('drip irrigation subsidy')">💧 Irrigation</button>
+        </div>
+
+        <div id="schemeResult" class="result-box" style="min-height:100px"></div>
+
+        <!-- Helpline Numbers -->
+        <div class="helpline-section">
+          <h3>📞 Important Helpline Numbers</h3>
+          <div class="helpline-grid">
+            <div class="helpline-card">
+              <div class="helpline-icon">🌾</div>
+              <div class="helpline-name">Kisan Call Center</div>
+              <div class="helpline-number">1800-180-1551</div>
+              <div class="helpline-sub">Free | 24x7</div>
+            </div>
+            <div class="helpline-card">
+              <div class="helpline-icon">💰</div>
+              <div class="helpline-name">PM-KISAN Helpline</div>
+              <div class="helpline-number">155261</div>
+              <div class="helpline-sub">Mon-Sat 6AM-10PM</div>
+            </div>
+            <div class="helpline-card">
+              <div class="helpline-icon">🌧️</div>
+              <div class="helpline-name">PMFBY Insurance</div>
+              <div class="helpline-number">1800-200-7710</div>
+              <div class="helpline-sub">Free | Toll Free</div>
+            </div>
+            <div class="helpline-card">
+              <div class="helpline-icon">🏦</div>
+              <div class="helpline-name">Nabard</div>
+              <div class="helpline-number">1800-200-0104</div>
+              <div class="helpline-sub">Agricultural Bank</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  <!-- ============================================================ -->
+  <!-- FLOATING KISAN BOT BUTTON + POPUP -->
+    <!-- FARM COPILOT TAB -->
+    
+
+  <!-- ============================================================ -->
+  <button class="floating-bot-btn" onclick="toggleFloatingChat()" id="floatingBotBtn">
+    <span class="floating-bot-icon">🤖</span>
+    <span class="floating-bot-badge" id="floatingBadge" style="display:none">1</span>
+  </button>
+
+  <!-- Floating Chat Popup -->
+  <div class="floating-chat-popup" id="floatingChatPopup">
+    <div class="floating-chat-header">
+      <div class="floating-chat-title">
+        <span>🌾</span>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--text)">Kisan Bot</div>
+          <div style="font-size:11px;color:var(--accent2)">● Online — Always here to help</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button onclick="openFullBot()" class="floating-expand-btn" title="Open full chatbot">⛶</button>
+        <button onclick="toggleFloatingChat()" class="floating-close-btn">✕</button>
+      </div>
+    </div>
+    <div class="floating-chat-box" id="floatingChatBox">
+      <div class="chat-msg bot">
+        <span class="chat-avatar">🌾</span>
+        <div class="chat-bubble">Namaste! 🌾 Kisan Bot yahan hai — fasal, mausam, ya mandi — kuch bhi poochho!</div>
+      </div>
+    </div>
+    <div id="floatingQuickReplies" class="quick-reply-row" style="padding:6px 10px"></div>
+    <div class="floating-chat-input">
+      <input type="text" id="floatingInput" placeholder="Kuch bhi poochho..." class="input-field">
+      <button onclick="sendFloatingChat()" class="btn-send" style="padding:9px 14px">Send</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Visionix AI &nbsp;|&nbsp; <span id="footerText">Empowering Indian Farmers with AI</span></p>
+    <span class="credit">Created by Priyavart</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
