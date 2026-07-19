@@ -1,4 +1,4 @@
-/* Visionix AI - Premium Design v2 */
+
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -34,7 +34,7 @@ body {
   overflow-x: hidden;
 }
 
-/* animated bg blobs */
+
 body::before {
   content: '';
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -44,7 +44,7 @@ body::before {
     radial-gradient(ellipse 30% 30% at 50% 50%, rgba(6,182,212,0.02) 0%, transparent 60%);
 }
 
-/* ===== HEADER — LEFT ALIGNED ===== */
+
 header {
   display: flex;
   align-items: center;
@@ -260,7 +260,6 @@ select.input-field {
 }
 select.input-field option { background: #061209; color: var(--text); }
 
-/* ===== BUTTONS ===== */
 .btn-primary {
   padding: 10px 20px;
   background: linear-gradient(135deg, var(--accent), #16a34a);
@@ -290,7 +289,7 @@ select.input-field option { background: #061209; color: var(--text); }
 
 .result-box { padding:14px; background:rgba(0,0,0,0.2); backdrop-filter:blur(8px); border-radius:10px; border:1px solid rgba(255,255,255,0.06); font-size:13px; line-height:1.9; color:var(--text2); min-height:46px; word-break:break-word; margin-top:10px; }
 
-/* ===== CHAT ===== */
+
 .kisanbot-box { height: 400px; }
 .chat-box { overflow-y:auto; padding:14px; background:rgba(0,0,0,0.18); backdrop-filter:blur(8px); border-radius:12px; border:1px solid rgba(255,255,255,0.05); margin:0 0 10px; display:flex; flex-direction:column; gap:10px; scroll-behavior:smooth; }
 .chat-box::-webkit-scrollbar { width:3px; }
@@ -325,13 +324,13 @@ select.input-field option { background: #061209; color: var(--text); }
 .typing-dot:nth-child(2){animation-delay:.2s} .typing-dot:nth-child(3){animation-delay:.4s}
 @keyframes tBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
 
-/* ===== MANDI ===== */
+
 .crop-chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; align-items:center; }
 .chip-label { font-size:12px; color:var(--dim); font-weight:500; }
 .crop-chip { padding:6px 13px; background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.15); border-radius:30px; color:var(--gold2); font-size:12px; cursor:pointer; transition:all 0.2s; font-family:var(--font-b); }
 .crop-chip:hover { background:rgba(245,158,11,0.14); border-color:rgba(245,158,11,0.3); transform:translateY(-1px); }
 
-/* ===== DASHBOARD ===== */
+
 .dashboard-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px; }
 .dash-card { background:rgba(255,255,255,0.03); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:18px; text-align:center; transition:all 0.25s; }
 .dash-card:hover { background:rgba(34,197,94,0.05); border-color:rgba(34,197,94,0.18); transform:translateY(-2px); }
@@ -339,7 +338,7 @@ select.input-field option { background: #061209; color: var(--text); }
 .dash-label { font-size:11px; color:var(--dim); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.3px; }
 .dash-value { font-family:var(--font-h); font-size:1.1rem; font-weight:700; color:var(--accent2); }
 
-/* ===== HISTORY ===== */
+
 .history-list { display:flex; flex-direction:column; gap:8px; margin-top:12px; max-height:400px; overflow-y:auto; }
 .history-item { display:flex; justify-content:space-between; align-items:center; padding:12px 15px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; font-size:13px; transition:all 0.2s; }
 .history-item:hover { border-color:rgba(34,197,94,0.2); background:rgba(34,197,94,0.04); }
@@ -348,7 +347,7 @@ select.input-field option { background: #061209; color: var(--text); }
 .time-tag { font-size:11px; color:var(--dim); }
 .empty-history { color:var(--dim); font-size:13px; text-align:center; padding:40px; }
 
-/* ===== COPILOT ===== */
+
 .copilot-badge { margin-left:auto; padding:5px 13px; background:linear-gradient(135deg,var(--gold),#d97706); border-radius:30px; font-size:11px; font-weight:700; color:#000; box-shadow:0 0 16px rgba(245,158,11,0.25); }
 .copilot-form { margin-top:4px; }
 .copilot-input-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
@@ -387,7 +386,7 @@ select.input-field option { background: #061209; color: var(--text); }
 .copilot-report-content td:first-child { color:var(--accent3); font-weight:600; }
 .copilot-report-content hr { border:none; border-top:1px solid rgba(255,255,255,0.04); margin:14px 0; }
 
-/* ===== GOV SCHEMES ===== */
+
 .scheme-badge { margin-left:auto; padding:5px 13px; background:linear-gradient(135deg,var(--accent),#15803d); border-radius:30px; font-size:11px; font-weight:700; color:#fff; }
 .btn-scheme { padding:10px 20px; background:linear-gradient(135deg,var(--gold),#d97706); border:none; border-radius:10px; color:#000; font-family:var(--font-h); font-size:13px; font-weight:700; cursor:pointer; transition:all 0.25s; white-space:nowrap; }
 .btn-scheme:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(245,158,11,0.25); }
@@ -404,7 +403,6 @@ select.input-field option { background: #061209; color: var(--text); }
 .helpline-number { font-family:var(--font-h); font-size:14px; font-weight:700; color:var(--accent2); margin-bottom:3px; }
 .helpline-sub { font-size:10px; color:var(--muted); }
 
-/* ===== FLOATING BOT ===== */
 .floating-bot-btn {
   position:fixed; bottom:26px; right:26px; z-index:999;
   width:56px; height:56px; border-radius:16px;
@@ -451,11 +449,9 @@ select.input-field option { background: #061209; color: var(--text); }
 .floating-chat-input { padding:9px 12px; display:flex; gap:7px; border-top:1px solid rgba(139,92,246,0.1); background:rgba(0,0,0,0.18); }
 .floating-chat-input .input-field { font-size:12px; }
 
-/* ===== FOOTER ===== */
 footer { text-align:center; padding:14px; color:var(--dim); font-size:12px; border-top:1px solid rgba(255,255,255,0.04); background:rgba(3,10,4,0.6); backdrop-filter:blur(8px); position:relative; z-index:1; }
 .credit { display:block; margin-top:3px; font-size:11px; color:var(--muted); }
 
-/* ===== RESPONSIVE ===== */
 @media(max-width:900px) { .dashboard-grid{grid-template-columns:repeat(2,1fr)} .helpline-grid{grid-template-columns:repeat(2,1fr)} .copilot-input-grid{grid-template-columns:1fr} }
 @media(max-width:640px) {
   header { height:auto; padding:12px 16px; flex-wrap:wrap; gap:10px; }
