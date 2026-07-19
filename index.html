@@ -51,7 +51,6 @@
 
   <div class="tab-content">
 
-    <!-- WEATHER TAB -->
     <div class="tab-panel" id="tab-weather">
       <div class="panel-card">
         <div class="panel-header">
@@ -69,7 +68,6 @@
       </div>
     </div>
 
-    <!-- DETECT TAB -->
     <div class="tab-panel" id="tab-detect">
       <div class="panel-card">
         <div class="panel-header">
@@ -93,7 +91,6 @@
         <button id="whatsappBtn" onclick="shareWhatsApp()" class="btn-whatsapp" style="display:none">📱 Share on WhatsApp</button>
         <div id="recommendation" class="result-box" style="margin-top:10px"></div>
 
-        <!-- Go to Kisan Bot Button -->
         <div id="gotoBot" style="display:none; margin-top:14px">
           <button onclick="switchTab('kisanbot', document.querySelector('.tab:nth-child(3)'));openFloatingChat()" class="btn-kisanbot">
             🤖 Chat with Kisan Bot about this disease →
@@ -102,7 +99,6 @@
       </div>
     </div>
 
-    <!-- KISAN BOT TAB -->
     <div class="tab-panel" id="tab-kisanbot">
       <div class="panel-card kisanbot-card">
         <div class="panel-header">
@@ -131,7 +127,6 @@
       </div>
     </div>
 
-    <!-- MANDI TAB -->
     <div class="tab-panel" id="tab-mandi">
       <div class="panel-card">
         <div class="panel-header">
@@ -163,7 +158,7 @@
       </div>
     </div>
 
-    <!-- CROP CALENDAR TAB -->
+    
     <div class="tab-panel" id="tab-calendar">
       <div class="panel-card">
         <div class="panel-header">
@@ -189,7 +184,6 @@
       </div>
     </div>
 
-    <!-- DASHBOARD TAB -->
     <div class="tab-panel" id="tab-dashboard">
       <div class="panel-card">
         <div class="panel-header">
@@ -214,7 +208,6 @@
       </div>
     </div>
 
-    <!-- SOIL TAB -->
     <div class="tab-panel" id="tab-soil">
       <div class="panel-card">
         <div class="panel-header">
@@ -241,7 +234,6 @@
       </div>
     </div>
 
-    <!-- HISTORY TAB -->
     <div class="tab-panel" id="tab-history">
       <div class="panel-card">
         <div class="panel-header">
@@ -260,7 +252,6 @@
 
   </div>
 
-    <!-- FARM COPILOT TAB -->
     <div class="tab-panel active" id="tab-copilot">
       <div class="panel-card copilot-card">
         <div class="panel-header">
@@ -272,7 +263,6 @@
           <div class="copilot-badge">⭐ ALL-IN-ONE</div>
         </div>
 
-        <!-- Input Form -->
         <div class="copilot-form">
           <div class="copilot-input-grid">
             <div class="copilot-input-group">
@@ -285,7 +275,6 @@
             </div>
           </div>
 
-          <!-- Photo Upload -->
           <div class="copilot-photo-section">
             <label>📸 Crop Photo (Optional — for disease detection)</label>
             <div class="copilot-upload-row">
@@ -307,7 +296,7 @@
           </button>
         </div>
 
-        <!-- Loading State -->
+        
         <div id="copilotLoading" style="display:none" class="copilot-loading">
           <div class="copilot-loading-steps">
             <div class="copilot-step" id="step1">📸 Analyzing crop photo...</div>
@@ -316,7 +305,7 @@
           </div>
         </div>
 
-        <!-- Report Output -->
+        
         <div id="copilotReport" style="display:none" class="copilot-report">
           <div class="copilot-report-header">
             <span>📊 Your Complete Farm Report</span>
@@ -331,7 +320,7 @@
       </div>
     </div>
 
-    <!-- GOVERNMENT SCHEME TAB -->
+    
     <div class="tab-panel" id="tab-scheme">
       <div class="panel-card scheme-card">
         <div class="panel-header">
@@ -357,7 +346,7 @@
           <button onclick="findSchemes()" class="btn-scheme">🔍 Find Schemes</button>
         </div>
 
-        <!-- Quick Scheme Buttons -->
+        
         <div class="scheme-quick">
           <span class="chip-label">Popular:</span>
           <button class="scheme-chip" onclick="quickScheme('PM-KISAN')">💰 PM-KISAN</button>
@@ -369,7 +358,7 @@
 
         <div id="schemeResult" class="result-box" style="min-height:100px"></div>
 
-        <!-- Helpline Numbers -->
+        
         <div class="helpline-section">
           <h3>📞 Important Helpline Numbers</h3>
           <div class="helpline-grid">
@@ -403,18 +392,16 @@
       </div>
     </div>
 
-  <!-- ============================================================ -->
-  <!-- FLOATING KISAN BOT BUTTON + POPUP -->
-    <!-- FARM COPILOT TAB -->
+  
     
 
-  <!-- ============================================================ -->
+  
   <button class="floating-bot-btn" onclick="toggleFloatingChat()" id="floatingBotBtn">
     <span class="floating-bot-icon">🤖</span>
     <span class="floating-bot-badge" id="floatingBadge" style="display:none">1</span>
   </button>
 
-  <!-- Floating Chat Popup -->
+  
   <div class="floating-chat-popup" id="floatingChatPopup">
     <div class="floating-chat-header">
       <div class="floating-chat-title">
