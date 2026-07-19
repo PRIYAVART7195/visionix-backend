@@ -1,6 +1,3 @@
-# Visionix AI - Backend Server
-# Made by Priyavart & Team for FlowZint Hackathon 2026
-# Using FastAPI + Groq AI for smart farming
 
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,8 +10,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI(title="Visionix AI")
-
-# allow all origins so frontend can talk to backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -22,15 +17,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# setup groq client
+
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 WEATHER_KEY = os.getenv("WEATHER_API_KEY")
 
-# using these two models - vision for images, text for chat
 VISION_MODEL = model="meta-llama/llama-4-scout-17b-16e-instruct"
 CHAT_MODEL = "llama-3.3-70b-versatile"
 
-# language instructions - added all major indian languages
+
 LANG_MAP = {
     "hindi":    "Respond in simple Hindi using Devanagari script.",
     "bhojpuri": "Respond in Bhojpuri language, like talking to a village elder.",
@@ -40,8 +34,7 @@ LANG_MAP = {
     "english":  "Respond in simple English that farmers can understand.",
 }
 
-# Dr. Rajesh Kumar - our AI farming expert persona
-# This prompt makes the AI give much better farming advice
+
 EXPERT_PROMPT = """You are Dr. Rajesh Kumar, an experienced Indian agricultural scientist with 25 years of field work.
 
 Crops you know well:
@@ -87,9 +80,6 @@ class CopilotReq(BaseModel):
     humidity: float = 0.0
     has_rain: bool = False
     weather_summary: str = ""
-
-
-# ----------- routes -----------
 
 @app.get("/")
 def home():
@@ -141,7 +131,6 @@ async def get_weather(city: str):
         return {"error": f"Something went wrong: {str(e)}"}
 
 
-# main disease detection using groq vision
 @app.post("/detect-disease")
 async def detect_disease(
     file: UploadFile = File(...),
@@ -151,7 +140,6 @@ async def detect_disease(
     has_rain: bool = False
 ):
     try:
-        # read and encode image
         img_bytes = await file.read()
         img_b64 = base64.b64encode(img_bytes).decode("utf-8")
         mime = file.content_type or "image/jpeg"
@@ -197,7 +185,6 @@ Please give your report in this format:
 
         result = response.choices[0].message.content.strip()
 
-        # extract disease name from response
         disease = "Unknown"
         for line in result.split('\n'):
             if "disease name" in line.lower():
@@ -216,11 +203,8 @@ Please give your report in this format:
     except Exception as e:
         return {"success": False, "error": str(e), "disease": "Detection failed"}
 
-
-# mandi price - tries govt api first, then groq as backup
 @app.get("/mandi/{crop}")
 async def get_mandi(crop: str, state: str = "Bihar"):
-    # try official data.gov.in api
     try:
         url = f"https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=579b464db66ec23bdd000001cdd3946e44ce4aab825ef8579006697&format=json&filters%5Bcommodity%5D={crop}&filters%5Bstate%5D={state}&limit=5"
         res = requests.get(url, timeout=8)
@@ -238,9 +222,8 @@ async def get_mandi(crop: str, state: str = "Bihar"):
                 })
             return {"crop": crop, "state": state, "prices": prices}
     except:
-        pass  # if govt api fails, use groq
-
-    # groq fallback for price estimate
+        pass  
+    
     try:
         resp = groq_client.chat.completions.create(
             model=CHAT_MODEL,
@@ -257,13 +240,11 @@ async def get_mandi(crop: str, state: str = "Bihar"):
     except Exception as e:
         return {"error": str(e)}
 
-
-# chatbot - disease aware and multilingual
 @app.post("/chat")
 async def chat(req: ChatMsg):
     lang = LANG_MAP.get(req.language.lower(), LANG_MAP["english"])
 
-    # add context if we know the disease
+    
     farm_context = ""
     if req.disease:
         farm_context = f"\nCurrent situation: Disease = {req.disease}, Temp = {req.temperature}°C, Humidity = {req.humidity}%, Rain = {'Yes' if req.has_rain else 'No'}"
@@ -289,7 +270,6 @@ Give practical advice in 3-5 bullet points. Use simple language. Include specifi
         return {"error": str(e), "reply": "Sorry, something went wrong. Please try again."}
 
 
-# treatment advice endpoint
 @app.post("/treatment")
 async def get_treatment(req: TreatmentReq):
     lang = LANG_MAP.get(req.language.lower(), LANG_MAP["english"])
@@ -313,9 +293,6 @@ Give a short treatment plan with Indian product names and dosages. Max 6 bullet 
     except Exception as e:
         return {"error": str(e)}
 
-
-# SMART FARM COPILOT - our main feature
-# combines disease detection + weather + soil + mandi + 7 day plan
 @app.post("/copilot")
 async def farm_copilot(req: CopilotReq):
     lang = LANG_MAP.get(req.language.lower(), LANG_MAP["english"])
@@ -437,8 +414,6 @@ Keep everything specific and practical. Use simple words."""
     except Exception as e:
         return {"success": False, "error": str(e)}
 
-
-# run server
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
