@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="Visionix AI")
+app = FastAPI(title="KRISHI AI")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -54,8 +54,6 @@ When giving treatment advice:
 - Keep language simple for rural farmers"""
 
 
-# ----------- request models -----------
-
 class ChatMsg(BaseModel):
     message: str
     language: str = "english"
@@ -85,8 +83,6 @@ class CopilotReq(BaseModel):
 def home():
     return {"status": "Visionix AI is running!", "version": "5.0"}
 
-
-# weather forecast using openweathermap
 @app.get("/weather/{city}")
 async def get_weather(city: str):
     url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={WEATHER_KEY}&units=metric"
@@ -313,7 +309,7 @@ Weather Info: {req.weather_summary or "Not available"}
 
 Write the report in this format:
 
-## 🌾 VISIONIX SMART FARM REPORT
+## 🌾 KRISHI SMART FARM REPORT
 **Location:** {req.location}
 **Crop:** {req.crop}
 **Date:** Today
