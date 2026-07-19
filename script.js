@@ -1,8 +1,6 @@
-/* ============================================================
-   VISIONIX AI v5.0 - Separate Kisan Bot + Floating Chat
-   ============================================================ */
 
-const BACKEND = "https://visionix-backend.onrender.com"; // change to render URL before final deploy
+
+const BACKEND = "https://visionix-backend.onrender.com";
 let currentLang = "english", currentDisease = "";
 let currentTemp = 0, currentHumidity = 0, hasRainForecast = false;
 let detectionHistory = JSON.parse(localStorage.getItem("visionix_history") || "[]");
@@ -11,9 +9,7 @@ let priceChart = null;
 let lastAnalysisText = "";
 let floatingChatOpen = false;
 
-/* ============================================================
-   TAB SWITCHING
-   ============================================================ */
+
 function switchTab(name, el) {
   document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
@@ -25,9 +21,6 @@ function switchTab(name, el) {
   if (name === "kisanbot") initKisanBot();
 }
 
-/* ============================================================
-   TRANSLATIONS
-   ============================================================ */
 const T = {
   english: { headerSub: "AI-Based Smart Resource Allocation for Farmers", weatherTitle: "Weather Prediction", detectTitle: "Crop Disease Detection", chatPH: "Ask about your crop...", mandiTitle: "Mandi Price", footerText: "Empowering Indian Farmers with AI", floatPH: "Ask anything..." },
   hindi: { headerSub: "किसानों के लिए AI स्मार्ट प्रणाली", weatherTitle: "मौसम पूर्वानुमान", detectTitle: "फसल रोग पहचान", chatPH: "फसल के बारे में पूछें...", mandiTitle: "मंडी भाव", footerText: "AI से किसानों को सशक्त बनाना", floatPH: "कुछ भी पूछें..." },
@@ -50,9 +43,6 @@ function setLang(lang, btn) {
   setPH("kisanBotInput", t.chatPH); setPH("floatingInput", t.floatPH);
 }
 
-/* ============================================================
-   STATUS
-   ============================================================ */
 function setPill(id, text, cls) { const el = document.getElementById(id); if (el) { el.textContent = text; el.className = `pill ${cls}`; } }
 function loadModel() { setPill("modelStatus", "✅ Groq Vision", "ready"); }
 async function checkBackend() {
@@ -60,9 +50,6 @@ async function checkBackend() {
   catch { setPill("backendStatus", "❌ Offline", "error"); }
 }
 
-/* ============================================================
-   WEATHER
-   ============================================================ */
 async function getWeather() {
   const city = document.getElementById("city").value.trim();
   if (!city) { alert("Enter city name"); return; }
@@ -86,9 +73,7 @@ async function getWeather() {
   } catch { el.innerHTML = "❌ Backend offline?"; }
 }
 
-/* ============================================================
-   CAMERA
-   ============================================================ */
+
 async function openCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
@@ -122,9 +107,6 @@ document.getElementById("imageUpload").addEventListener("change", function () {
   preview.src = URL.createObjectURL(file); preview.style.display = "block";
 });
 
-/* ============================================================
-   DISEASE DETECTION
-   ============================================================ */
 async function detectDisease() {
   const file = document.getElementById("imageUpload").files[0];
   if (!file) { alert("Upload or capture a crop image first"); return; }
@@ -171,14 +153,11 @@ async function detectDisease() {
 function shareWhatsApp() {
   const isHealthy = currentDisease.toLowerCase().includes("healthy");
   const msg = isHealthy
-    ? `🌾 *Visionix AI Report*\n\n✅ Crop is *Healthy*!\n\nAnalyzed by Groq Vision AI\n🔗 visionix.ai`
-    : `🌾 *Visionix AI Report*\n\n🦠 Disease: *${currentDisease}*\n\n${lastAnalysisText.substring(0, 300)}...\n\nAnalyzed by Groq Vision AI`;
+    ? `🌾 *KRISHI AI Report*\n\n✅ Crop is *Healthy*!\n\nAnalyzed by Groq Vision AI\n🔗 visionix.ai`
+    : `🌾 *KRISHI AI Report*\n\n🦠 Disease: *${currentDisease}*\n\n${lastAnalysisText.substring(0, 300)}...\n\nAnalyzed by Groq Vision AI`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
-/* ============================================================
-   MANDI PRICE + GRAPH
-   ============================================================ */
 async function getMandiPrice() {
   const crop = document.getElementById("cropName").value.trim();
   const state = document.getElementById("stateName").value.trim() || "Bihar";
@@ -229,9 +208,6 @@ function showPriceGraph(labels, modal, min, max, crop) {
 
 function quickCrop(crop) { document.getElementById("cropName").value = crop; getMandiPrice(); }
 
-/* ============================================================
-   CROP CALENDAR
-   ============================================================ */
 async function getCropCalendar() {
   const state = document.getElementById("calendarState").value.trim() || "Bihar";
   const month = document.getElementById("calendarMonth").value;
@@ -247,9 +223,6 @@ async function getCropCalendar() {
   } catch { el.innerHTML = "❌ Error."; }
 }
 
-/* ============================================================
-   SOIL HEALTH
-   ============================================================ */
 async function getSoilHealth() {
   const city = document.getElementById("soilCity").value.trim() || "Bihar";
   const crop = document.getElementById("soilCrop").value.trim() || "Wheat";
@@ -265,9 +238,6 @@ async function getSoilHealth() {
   } catch { el.innerHTML = "❌ Error."; }
 }
 
-/* ============================================================
-   DASHBOARD
-   ============================================================ */
 function updateDashboard() {
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   set("dashTemp", currentTemp ? `${currentTemp}°C` : "-- °C");
@@ -281,9 +251,6 @@ function updateDashboard() {
   if (actEl) actEl.innerHTML = activity || "Run weather check and crop analysis to see activity!";
 }
 
-/* ============================================================
-   HISTORY
-   ============================================================ */
 function saveHistory(disease, prob) {
   detectionHistory.unshift({ disease, confidence: Math.round(prob*100), healthy: disease.toLowerCase().includes("healthy"), time: new Date().toLocaleString("en-IN",{hour12:true,hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"}) });
   if (detectionHistory.length > 20) detectionHistory = detectionHistory.slice(0,20);
@@ -296,9 +263,6 @@ function renderHistory() {
 }
 function clearHistory() { detectionHistory = []; localStorage.removeItem("visionix_history"); renderHistory(); updateDashboard(); }
 
-/* ============================================================
-   KISAN BOT — SEPARATE TAB (Full Screen)
-   ============================================================ */
 const QUICK_REPLIES_DATA = {
   welcome: [
     {text:"🦠 Disease Help", msg:"I need help with crop disease"},
@@ -392,9 +356,6 @@ async function sendKisanBot() {
 
 document.getElementById("kisanBotInput").addEventListener("keypress", e => { if (e.key === "Enter") sendKisanBot(); });
 
-/* ============================================================
-   FLOATING CHAT BOT
-   ============================================================ */
 let floatingInitialized = false;
 
 function toggleFloatingChat() {
@@ -479,9 +440,6 @@ async function sendFloatingChat() {
 
 document.getElementById("floatingInput").addEventListener("keypress", e => { if (e.key === "Enter") sendFloatingChat(); });
 
-/* ============================================================
-   VOICE INPUT
-   ============================================================ */
 function startVoiceBot() {
   if (!("webkitSpeechRecognition" in window) && !("SpeechRecognition" in window)) { alert("Use Chrome!"); return; }
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -494,18 +452,12 @@ function startVoiceBot() {
   r.onerror = r.onend = () => { btn.classList.remove("listening"); btn.textContent = "🎤"; };
 }
 
-/* ============================================================
-   INIT
-   ============================================================ */
+
 window.onload = () => { loadModel(); checkBackend(); updateDashboard(); };
 
-/* ============================================================
-   🚀 SMART FARM COPILOT
-   ============================================================ */
 let copilotCameraStream = null;
 let copilotReportText = "";
 
-// Camera for Copilot
 async function openCopilotCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
@@ -541,7 +493,6 @@ document.getElementById("copilotImage").addEventListener("change", function() {
   document.getElementById("copilotUploadText").textContent = file.name + " ✅";
 });
 
-// Step animation
 function setStep(stepNum, status) {
   const el = document.getElementById(`step${stepNum}`);
   if (!el) return;
@@ -551,7 +502,6 @@ function setStep(stepNum, status) {
   }
 }
 
-// Main Copilot Function
 async function runCopilot() {
   const location = document.getElementById("copilotLocation").value.trim();
   const crop = document.getElementById("copilotCrop").value.trim();
@@ -561,21 +511,18 @@ async function runCopilot() {
     return;
   }
 
-  // Disable button
+
   const btn = document.getElementById("copilotBtn");
   btn.disabled = true; btn.textContent = "⏳ Generating Report...";
 
-  // Show loading
   document.getElementById("copilotLoading").style.display = "block";
   document.getElementById("copilotReport").style.display = "none";
 
-  // Reset steps
   ["step1","step2","step3"].forEach(s => {
     const el = document.getElementById(s);
     if (el) { el.className = "copilot-step"; el.textContent = el.textContent.replace(" ✅","").replace("...","..."); }
   });
 
-  // Step 1 — Disease Detection
   setStep(1, "active");
   let detectedDisease = "Not analyzed";
 
@@ -611,7 +558,6 @@ async function runCopilot() {
   }
   setStep(1, "done");
 
-  // Step 2 — Weather
   setStep(2, "active");
   let weatherSummary = "";
   try {
@@ -626,7 +572,6 @@ async function runCopilot() {
   } catch { weatherSummary = "Weather fetch failed"; }
   setStep(2, "done");
 
-  // Step 3 — Generate Full Report
   setStep(3, "active");
   try {
     const res = await fetch(`${BACKEND}/copilot`, {
@@ -646,7 +591,6 @@ async function runCopilot() {
     if (data.success) {
       copilotReportText = data.report;
 
-      // Format report
       let html = data.report
         .replace(/\n/g, "<br>")
         .replace(/## (.*?)(<br>|$)/g, '<h2>$1</h2>')
@@ -657,10 +601,8 @@ async function runCopilot() {
       document.getElementById("copilotReportContent").innerHTML = html;
       document.getElementById("copilotReport").style.display = "block";
 
-      // Auto update dashboard
       updateDashboard();
 
-      // Notify Kisan Bot
       showFloatingBotMessage(`🚀 Farm Copilot report ready for **${crop}** in **${location}**! ${detectedDisease !== "Not analyzed" ? `Disease: ${detectedDisease}.` : ""} Ask me anything about your report!`);
     } else {
       document.getElementById("copilotReportContent").innerHTML = `❌ Error: ${data.error}`;
@@ -672,12 +614,10 @@ async function runCopilot() {
     document.getElementById("copilotReport").style.display = "block";
   }
 
-  // Re-enable button
   document.getElementById("copilotLoading").style.display = "none";
   btn.disabled = false; btn.textContent = "🚀 Generate Complete Farm Report";
 }
 
-// Share Copilot Report on WhatsApp
 function shareCopilotWhatsApp() {
   const location = document.getElementById("copilotLocation").value;
   const crop = document.getElementById("copilotCrop").value;
@@ -686,7 +626,6 @@ function shareCopilotWhatsApp() {
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
-// Print Report
 function printCopilotReport() {
   const content = document.getElementById("copilotReportContent").innerHTML;
   const win = window.open("", "_blank");
@@ -694,7 +633,7 @@ function printCopilotReport() {
     <html><head><title>Visionix Farm Report</title>
     <style>body{font-family:Arial,sans-serif;padding:20px;color:#111;line-height:1.8}h2{color:#16a34a;margin-top:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px}th{background:#f0fdf4}hr{margin:16px 0;border-color:#ccc}</style>
     </head><body>
-    <h1 style="color:#16a34a">🌾 Visionix AI — Smart Farm Report</h1>
+    <h1 style="color:#16a34a">🌾 KRISHI AI  — Smart Farm Report</h1>
     ${content}
     <br><hr><p style="color:#999;font-size:12px">Generated by Visionix AI | visionix.ai</p>
     </body></html>`);
@@ -702,9 +641,6 @@ function printCopilotReport() {
   win.print();
 }
 
-/* ============================================================
-   🏛️ GOVERNMENT SCHEME FINDER
-   ============================================================ */
 async function findSchemes() {
   const state = document.getElementById("schemeState").value.trim() || "India";
   const crop = document.getElementById("schemeCrop").value.trim() || "all crops";
